@@ -1,8 +1,8 @@
 module github.com/alexey-medvedchikov/go-heapview
 
-go 1.19
+go 1.18
 
-require github.com/urfave/cli/v2 v2.24.2
+require github.com/urfave/cli/v2 v2.25.0
 
 require (
 	github.com/cpuguy83/go-md2man/v2 v2.0.2 // indirect

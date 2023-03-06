@@ -6,7 +6,7 @@ To produce heap dump, you can increase number of top-level objects allocated by 
 If you increase the number of objects you need to raise sleep times or do this manually.
 
 ```shell
-go build -o bin/01-leaky-slice ./example/01-leaky-slice/...
+go build -gcflags='all=-N -l' -o bin/01-leaky-slice ./example/01-leaky-slice/...
 ./bin/01-leaky-slice &
 pid=$!
 sleep 1
@@ -15,40 +15,15 @@ sleep 5
 kill -s TERM "$pid"
 ```
 
-After the heap dump is produced you can run heapview to inspec the file:
+After the heap dump is produced you can run `heapview` to inspect the file:
 
 ```plain
 ❯ go run ./cmd/heapview/ owned heapdump.dat
-pointer 0xc0000061a0
-  own size 416
-  owned size 208
-  owned count 3
-  found in frames
-    0: c000104df808x runtime.chanrecv
-pointer 0xc00007a000
-  own size 96
-  owned size 528
-  owned count 3
-  found in frames
-    0: c000104df808x runtime.chanrecv
-pointer 0xc000007380
-  own size 416
-  owned size 384
-  owned count 4
-  found in frames
-    0: c000100e1808x runtime.selectgo
-pointer 0xc00007a1e0
-  own size 96
-  owned size 16
-  owned count 1
-  found in frames
-    0: c00009bfa008x github.com/alexey-medvedchikov/go-heapview.SetupHandler.func1
-pointer 0xc000308000
-  own size 10240
-  owned size 1048000
-  owned count 2000
-  found in frames
-    0: c000104eb008x main.main
+{"Address":824633745824,"OwnSize":416,"OwnedSize":208,"OwnedCount":3,"Frames":[{"Address":824634154328,"FuncName":"runtime.chanrecv"}]}
+{"Address":824634221024,"OwnSize":96,"OwnedSize":16,"OwnedCount":1,"Frames":[{"Address":824634425216,"FuncName":"github.com/alexey-medvedchikov/go-heapview.SetupHandler.func1"}]}
+{"Address":824636440576,"OwnSize":10240,"OwnedSize":1048000,"OwnedCount":2000,"Frames":[{"Address":824634154512,"FuncName":"main.main"}]}
+{"Address":824633750400,"OwnSize":416,"OwnedSize":384,"OwnedCount":4,"Frames":[{"Address":824634281464,"FuncName":"runtime.selectgo"}]}
+{"Address":824634220544,"OwnSize":96,"OwnedSize":528,"OwnedCount":3,"Frames":[{"Address":824634154328,"FuncName":"runtime.chanrecv"}]}
 ```
 
 The last object is the one we're interested in. It is an array that backs `Client.cache` slice.

@@ -35,7 +35,7 @@ type frame struct {
 
 type pointer struct {
 	Address    heap.Address
-	OwnSize    int
+	Size       int
 	OwnedSize  int
 	OwnedCount int
 	Frames     []frame
@@ -57,7 +57,7 @@ func ownedAction(r io.Reader) error {
 
 			p := pointer{
 				Address:    object.Addr,
-				OwnSize:    int(object.Size),
+				Size:       int(object.Size),
 				OwnedSize:  int(stats.OwnedSize),
 				OwnedCount: int(stats.OwnedCount),
 			}

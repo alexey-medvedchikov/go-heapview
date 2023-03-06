@@ -2,8 +2,6 @@ package heap
 
 import (
 	"encoding/binary"
-
-	"github.com/alexey-medvedchikov/go-heapview/internal/heapfile"
 )
 
 type Address uint64
@@ -13,7 +11,7 @@ const addressSize = 8
 type Heap struct {
 	objects            map[Address]Object
 	stackFrames        map[Address]StackFrame
-	gorotines          map[Address]heapfile.Goroutine
+	goroutines         map[Address]Goroutine
 	stackFramePtrIndex map[Address][]Address
 	byteOrder          binary.ByteOrder
 }
@@ -37,6 +35,7 @@ func New(byteOrder binary.ByteOrder) *Heap {
 	return &Heap{
 		objects:            map[Address]Object{},
 		stackFrames:        map[Address]StackFrame{},
+		goroutines:         map[Address]Goroutine{},
 		stackFramePtrIndex: map[Address][]Address{},
 		byteOrder:          byteOrder,
 	}

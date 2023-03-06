@@ -11,5 +11,5 @@ func (h *Heap) Goroutines() Goroutines {
 }
 
 func (g Goroutines) Add(record heapfile.Goroutine) {
-	g.heap.gorotines[Address(record.Frame)] = record
+	g.heap.goroutines[Address(record.Frame)] = Goroutine{}
 }
